@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Members - Exodia Clan</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #ff1a1a;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #ff1a1a;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+    .admin-login {
+      margin-top: 15px;
+    }
+    .admin-login button {
+      background-color: #ff1a1a;
+      color: #0d0d0d;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .admin-login button:hover {
+      background-color: #cc0000;
+    }
+    .members-section {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+    .member-card {
+      background-color: #1a1a1a;
+      border: 2px solid #ff1a1a;
+      border-radius: 10px;
+      padding: 20px;
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .member-card:hover {
+      transform: translateY(-10px);
+    }
+    .member-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ff1a1a;
+      margin-bottom: 15px;
+    }
+    .member-name {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .member-role {
+      font-size: 1em;
+      color: #cccccc;
+    }
+    .admin-controls {
+      margin-top: 10px;
+      display: none;
+    }
+    .admin-controls button {
+      background-color: #ff1a1a;
+      border: none;
+      color: #0d0d0d;
+      font-weight: bold;
+      margin: 5px 5px 0 5px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .admin-controls button:hover {
+      background-color: #cc0000;
+    }
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: #1a1a1a;
+      border-top: 2px solid #ff1a1a;
+      margin-top: 50px;
+    }
+    footer .social-icons {
+      margin-top: 20px;
+    }
+    .social-icons a {
+      color: #ff1a1a;
+      margin: 0 15px;
+      font-size: 2em;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .social-icons a:hover {
+      color: #cc0000;
+    }
+    .back-home {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #ff1a1a;
+      color: #0d0d0d;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .back-home:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="backgroundCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></canvas>
+<script>
+const canvas = document.getElementById('backgroundCanvas');
+const ctx = canvas.getContext('2d');
+
+let width, height;
+function resizeCanvas() {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+const particles = [];
+for (let i = 0; i < 100; i++) {
+  particles.push({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    size: Math.random() * 2 + 1,
+    speedX: (Math.random() - 0.5) * 0.5,
+    speedY: (Math.random() - 0.5) * 0.5
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = '#ff1a1a';
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function updateParticles() {
+  particles.forEach(p => {
+    p.x += p.speedX;
+    p.y += p.speedY;
+    if (p.x < 0 || p.x > width) p.speedX = -p.speedX;
+    if (p.y < 0 || p.y > height) p.speedY = -p.speedY;
+  });
+}
+
+function animate() {
+  drawParticles();
+  updateParticles();
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+<header>
+  <h1>Exodia Clan Leaders</h1>
+  <div class="admin-login">
+    <button onclick="adminLogin()">Admin Login</button>
+  </div>
+</header>
+
+<section class="members-section">
+  <h2>Meet Our Team</h2>
+  
+  <div class="members-grid">
+    <div class="member-card">
+      <img src="images/member1.jpg" alt="Leader" class="member-avatar">
+      <div class="member-name">Lfenan</div>
+      <div class="member-role">Clan Leader</div>
+      <div class="admin-controls">
+        <button onclick="editMember(this)">Edit</button>
+        <button onclick="deleteMember(this)">Delete</button>
+      </div>
+    </div>
+    <div class="member-card">
+      <img src="images/member2.jpg" alt="Co Leader" class="member-avatar">
+      <div class="member-name">Draz</div>
+      <div class="member-role">Co Leader</div>
+      <div class="admin-controls">
+        <button onclick="editMember(this)">Edit</button>
+        <button onclick="deleteMember(this)">Delete</button>
+      </div>
+    </div>
+    <div class="member-card">
+      <img src="images/member3.jpg" alt="Co Leader" class="member-avatar">
+      <div class="member-name">7amza</div>
+      <div class="member-role">Co Leader</div>
+      <div class="admin-controls">
+        <button onclick="editMember(this)">Edit</button>
+        <button onclick="deleteMember(this)">Delete</button>
+      </div>
+    </div>
+    <div class="member-card">
+      <img src="images/member4.jpg" alt="Co Leader" class="member-avatar">
+      <div class="member-name">Yuri</div>
+      <div class="member-role">Co Leader</div>
+      <div class="admin-controls">
+        <button onclick="editMember(this)">Edit</button>
+        <button onclick="deleteMember(this)">Delete</button>
+      </div>
+    </div>
+    <!-- Add more members here -->
+  </div>
+
+</section>
+
+<footer>
+  <p>&copy; 2025 Clan Exodia. All Rights Reserved.</p>
+  <p style="margin: 10px 0; font-size: 1.2em;">
+    Made with <span style="color: #ff1a1a;">❤️</span> by <strong>Meed</strong>
+  </p>
+  <div class="social-icons">
+    <a href="https://www.instagram.com/exodia.family?igsh=YTRhZTZpNTEzY2lx" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
+  <a href="index.html" class="back-home">🏠 Back to Home</a>
+</footer>
+
+<script>
+function adminLogin() {
+  const code = prompt("Enter the secret admin code:");
+  if (code === "exodia150root") {
+    document.querySelectorAll('.admin-controls').forEach(control => {
+      control.style.display = 'block';
+    });
+    alert("Admin mode activated!");
+  } else {
+    alert("Incorrect code. Access denied.");
+  }
+}
+
+function editMember(button) {
+  const card = button.closest('.member-card');
+  const nameDiv = card.querySelector('.member-name');
+  const roleDiv = card.querySelector('.member-role');
+  const avatarImg = card.querySelector('.member-avatar');
+
+  const newName = prompt("Edit member name:", nameDiv.textContent);
+  const newRole = prompt("Edit member role:", roleDiv.textContent);
+  const newPhoto = prompt("Enter new photo URL:", avatarImg.src);
+
+  if (newName !== null && newName.trim() !== "") nameDiv.textContent = newName;
+  if (newRole !== null && newRole.trim() !== "") roleDiv.textContent = newRole;
+  if (newPhoto !== null && newPhoto.trim() !== "") avatarImg.src = newPhoto;
+}
+
+function deleteMember(button) {
+  if (confirm("Are you sure you want to delete this member?")) {
+    const card = button.closest('.member-card');
+    card.remove();
+  }
+}
+</script>
+
+</body>
+</html>

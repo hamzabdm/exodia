@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rules & Requirements - Exodia Clan</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #ff1a1a;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #ff1a1a;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+    section {
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h2 {
+      margin-top: 30px;
+      font-size: 2em;
+      text-align: center;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    li {
+      background-color: #1a1a1a;
+      border: 2px solid #ff1a1a;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      padding: 20px;
+      font-size: 1.2em;
+      transition: background-color 0.3s;
+    }
+    li:hover {
+      background-color: #0d0d0d;
+    }
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: #1a1a1a;
+      border-top: 2px solid #ff1a1a;
+      margin-top: 50px;
+    }
+    footer .social-icons {
+      margin-top: 20px;
+    }
+    .social-icons a {
+      color: #ff1a1a;
+      margin: 0 15px;
+      font-size: 2em;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .social-icons a:hover {
+      color: #cc0000;
+    }
+    .back-home {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #ff1a1a;
+      color: #0d0d0d;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .back-home:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+
+<body>
+
+    <canvas id="backgroundCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></canvas>
+    <script>
+      const canvas = document.getElementById('backgroundCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      let width, height;
+      function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      
+      const particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 2 + 1,
+          speedX: (Math.random() - 0.5) * 0.5,
+          speedY: (Math.random() - 0.5) * 0.5
+        });
+      }
+      
+      function drawParticles() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#ff1a1a';
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+      
+      function updateParticles() {
+        particles.forEach(p => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+      
+          if (p.x < 0 || p.x > width) p.speedX = -p.speedX;
+          if (p.y < 0 || p.y > height) p.speedY = -p.speedY;
+        });
+      }
+      
+      function animate() {
+        drawParticles();
+        updateParticles();
+        requestAnimationFrame(animate);
+      }
+      
+      animate();
+      </script>
+
+<header>
+  <h1>Exodia Clan Rules & Requirements</h1>
+</header>
+
+<section>
+  <h2>Requirements to Join</h2>
+  <ul>
+    <li>➤ Must be at least 16 years old.</li>
+    <li>➤ Must have an active Discord account.</li>
+    <li>➤ Must be respectful to all members and allies.</li>
+    <li>➤ Must have a mic for communication during gameplay.</li>
+    <li>➤ Must be active at least 3 days a week.</li>
+  </ul>
+
+  <h2>Clan Rules</h2>
+  <ul>
+    <li>➤ No toxicity, racism, or hate speech of any kind.</li>
+    <li>➤ Follow orders from Clan Leaders and Admins.</li>
+    <li>➤ No cheating, exploiting, or hacking in games.</li>
+    <li>➤ Keep drama outside the clan — we are a family here.</li>
+    <li>➤ Represent Exodia Clan with pride and honor.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>&copy; 2025 Clan Exodia. All Rights Reserved.</p>
+  <p style="margin: 10px 0; font-size: 1.2em;">
+    Made with <span style="color: #ff1a1a;">❤️</span> by <strong>Meed</strong>
+  </p>
+  <div class="social-icons">
+    <a href="https://www.instagram.com/exodia.family?igsh=YTRhZTZpNTEzY2lx" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
+
+  <a href="index.html" class="back-home">🏠 Back to Home</a>
+</footer>
+
+</body>
+</html>

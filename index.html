@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clan Exodia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Your existing styles (same) */
+    body {
+      background-color: #0d0d0d;
+      color: #ff0000;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: filter 0.5s ease;
+      scroll-behavior: smooth;
+    }
+    header {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #ff1a1a;
+      position: relative;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.8em;
+    }
+    section {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .about {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+    .join-btn {
+      background-color: #ff1a1a;
+      color: #0d0d0d;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background-color 0.3s;
+    }
+    .join-btn:hover {
+      background-color: #cc0000;
+    }
+    .form-container {
+      display: none;
+      margin-top: 40px;
+      background-color: #1a1a1a;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    td {
+      padding: 12px 10px;
+      vertical-align: middle;
+    }
+    td.label {
+      text-align: right;
+      font-weight: bold;
+      padding-right: 20px;
+      color: #ff1a1a;
+      width: 30%;
+    }
+    td.input-field input, td.input-field textarea {
+      width: 100%;
+      padding: 10px;
+      background-color: #0d0d0d;
+      border: 2px solid #ff1a1a;
+      color: #ff1a1a;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    .form-container button {
+      background-color: #ff1a1a;
+      color: #0d0d0d;
+      padding: 12px 25px;
+      font-size: 1em;
+      border: none;
+      margin-top: 20px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background-color: #cc0000;
+    }
+    .success-message {
+      display: none;
+      margin-top: 20px;
+      color: #00cc66;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: #1a1a1a;
+      border-top: 2px solid #ff1a1a;
+      margin-top: 50px;
+    }
+    footer .social-icons {
+      margin-top: 20px;
+    }
+    .social-icons a {
+      color: #ff1a1a;
+      margin: 0 15px;
+      font-size: 2em;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .social-icons a:hover {
+      color: #cc0000;
+    }
+    .menu-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 1.8em;
+      cursor: pointer;
+      color: #ff1a1a;
+      z-index: 2000;
+      transition: color 0.3s;
+    }
+    .menu-btn:hover {
+      color: #cc0000;
+    }
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1500;
+      top: 0;
+      left: 0;
+      background-color: rgba(26, 26, 26, 0.98);
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+    .sidebar a {
+      padding: 10px 30px;
+      text-decoration: none;
+      font-size: 1.5em;
+      color: #ff1a1a;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background-color: #0d0d0d;
+    }
+    .closebtn {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 2em;
+      color: #ff1a1a;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .closebtn:hover {
+      color: #cc0000;
+    }
+    .blur {
+      filter: blur(5px);
+    }
+    @media (max-width: 768px) {
+      td.label {
+        text-align: left;
+        padding-right: 0;
+      }
+      table, td {
+        display: block;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="backgroundCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></canvas>
+  <script>
+    const canvas = document.getElementById('backgroundCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    const particles = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 2 + 1,
+        speedX: (Math.random() - 0.5) * 0.5,
+        speedY: (Math.random() - 0.5) * 0.5
+      });
+    }
+    
+    function drawParticles() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#ff1a1a';
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+    
+    function updateParticles() {
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+    
+        if (p.x < 0 || p.x > width) p.speedX = -p.speedX;
+        if (p.y < 0 || p.y > height) p.speedY = -p.speedY;
+      });
+    }
+    
+    function animate() {
+      drawParticles();
+      updateParticles();
+      requestAnimationFrame(animate);
+    }
+    
+    animate();
+    </script>
+    
+  <header>
+    <div class="menu-btn" onclick="openMenu()">☰</div>
+    <h1>Clan Exodia</h1>
+  </header>
+
+  <!-- Sidebar -->
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">×</a>
+    <a href="#top" onclick="closeMenu()">🏠 Home</a>
+    <a href="#join-form" onclick="toggleForm(); closeMenu()">📝 Join Us</a>
+    <a href="rules.html">📜 Rules</a>
+    <a href="news.html">📢 News</a>
+    <a href="events.html">🎉 Events</a>
+    <a href="gallery.html">📷 Gallery</a>
+    <a href="leaders.html">👤 Leaders</a>
+  </div>
+
+  <div id="main-content">
+    <section id="top">
+      <div class="about">
+        <h2>About Exodia Clan</h2>
+        <p>Welcome to Exodia Clan — the ultimate gaming brotherhood.  
+        We are a competitive and friendly team that aims for greatness in every match.  
+        Join us, grow stronger, and leave your mark in the gaming world!</p>
+
+        <button class="join-btn" onclick="toggleForm()">Request to Join</button>    
+
+        <div id="join-form" class="form-container">
+          <h3>Join Exodia Clan</h3>
+          <form onsubmit="handleFormSubmit(event)">
+            <table>
+              <tr>
+                <td class="label">Your Name:</td>
+                <td class="input-field"><input type="text" required></td>
+              </tr>
+              <tr>
+                <td class="label">Age:</td>
+                <td class="input-field"><input type="number" required></td>
+              </tr>
+              <tr>
+                <td class="label">Discord User:</td>
+                <td class="input-field"><input type="text" placeholder="@user" required></td>
+              </tr>
+              <tr>
+                <td class="label">Why join Exodia Clan:</td>
+                <td class="input-field"><textarea rows="4" required></textarea></td>
+              </tr>
+            </table>
+            <button type="submit">Submit Request</button>
+          </form>
+          <div id="success-message" class="success-message">
+            Your Request Has Been Sent!
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+<!-- Clan Stats Section with Animated Counters -->
+<section style="background-color: #1a1a1a; padding: 50px 20px; text-align: center; border-top: 2px solid #ff1a1a; border-bottom: 2px solid #ff1a1a;">
+
+  <h2 style="color: #ff1a1a; font-size: 2.5em; margin-bottom: 40px;">⚔️ Clan Stats ⚔️</h2>
+
+  <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; max-width: 1000px; margin: auto;">
+
+    <div style="background-color: #0d0d0d; border: 2px solid #ff1a1a; padding: 30px; border-radius: 15px; width: 220px;">
+      <h3 style="font-size: 2em; color: #ff1a1a;" class="counter" data-target="200">0</h3>
+      <p style="color: #ccc;">+200 Members</p>
+    </div>
+
+    <div style="background-color: #0d0d0d; border: 2px solid #ff1a1a; padding: 30px; border-radius: 15px; width: 220px;">
+      <h3 style="font-size: 2em; color: #ff1a1a;" class="counter" data-target="24">0</h3>
+      <p style="color: #ccc;">24/7 Discord Activity</p>
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+  const counters = document.querySelectorAll('.counter');
+  counters.forEach(counter => {
+    counter.innerText = '0';
+    const updateCounter = () => {
+      const target = +counter.getAttribute('data-target');
+      const current = +counter.innerText;
+      const increment = target / 200; // speed (bigger divisor = slower)
+
+      if (current < target) {
+        counter.innerText = Math.ceil(current + increment);
+        setTimeout(updateCounter, 10); // 10ms speed
+      } else {
+        counter.innerText = target; // make sure it finishes at exact number
+      }
+    };
+    updateCounter();
+  });
+</script>
+
+    <footer>
+      <p>&copy; 2025 Clan Exodia. All Rights Reserved.</p>
+      <p style="margin: 10px 0; font-size: 1.2em;">
+        Made with <span style="color: #ff1a1a;">❤️</span> by <strong>Meed</strong>
+      </p>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/exodia.family?igsh=YTRhZTZpNTEzY2lx" target="_blank"><i class="fab fa-instagram"></i></a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const webhookURL = "https://discord.com/api/webhooks/1366034775416115301/xBgBapWBaWoQ2hhlQsHimrx35YT_tbL3oFeLsYNGCWJEuX2z5_Ka-hU_zo55ZUwAEWd5";
+
+    function toggleForm() {
+      const form = document.getElementById('join-form');
+      form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+
+      const inputs = event.target.querySelectorAll('input, textarea');
+      const name = inputs[0].value.trim();
+      const age = inputs[1].value.trim();
+      const discordUser = inputs[2].value.trim();
+      const reason = inputs[3].value.trim();
+
+      const message = {
+        content: `**New Exodia Clan Join Request**\n\n**Name:** ${name}\n**Age:** ${age}\n**Discord:** ${discordUser}\n**Reason:** ${reason}`
+      };
+
+      fetch(webhookURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(message)
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('success-message').style.display = 'block';
+          event.target.reset();
+        } else {
+          alert("There was an error sending your request. Please try again.");
+        }
+      })
+      .catch(error => {
+        console.error('Error sending request:', error);
+        alert("There was an error sending your request. Please try again.");
+      });
+    }
+
+    function openMenu() {
+      document.getElementById("mySidebar").style.width = "250px";
+      document.getElementById("main-content").classList.add("blur");
+    }
+
+    function closeMenu() {
+      document.getElementById("mySidebar").style.width = "0";
+      document.getElementById("main-content").classList.remove("blur");
+    }
+
+  </script>
+
+</body>
+</html>
