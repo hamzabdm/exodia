@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "exodiaroot";
-$password = "exodia150root";
+$username = "root";
+$password = "pssword";
 $dbname = "exodia_clan";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
