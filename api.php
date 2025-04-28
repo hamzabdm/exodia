@@ -1,5 +1,5 @@
 <?php
-$pdo = new PDO('mysql:host=localhost;dbname=exodia_clan', 'your_username', 'your_password');
+$pdo = new PDO('mysql:host=localhost;dbname=exodia_clan', 'exodiaroot', 'exodia150root');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $action = $_GET['action'] ?? '';
